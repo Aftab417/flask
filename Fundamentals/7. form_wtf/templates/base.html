@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Flask Auth{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .flash { padding: 10px; margin-bottom: 15px; border-radius: 5px; color: white; }
+        .success { background-color: green; }
+        .error { background-color: red; }
+        .info { background-color: blue; }
+        form { margin-top: 20px; }
+        input, button { padding: 8px; margin: 5px 0; }
+        a { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>
