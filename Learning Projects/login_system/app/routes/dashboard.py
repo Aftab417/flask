@@ -1,14 +1,11 @@
 from flask import Blueprint, session, redirect, url_for, flash, render_template
+from flask_login import current_user, login_required 
 from app.models.user import Users
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 
 
 @dashboard_bp.route("/")
+@login_required
 def dashboard():
-    if "user_id" not in session:
-        flash("Please log in first.", "warning")
-        return redirect(url_for("auth.login"))
-
-    user = Users.query.get(session["user_id"])
-    return render_template('dashboard.html', email=user.email) 
+    return render_template('dashboard.html', email=current_user.email) 

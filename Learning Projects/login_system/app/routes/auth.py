@@ -5,6 +5,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField
 from wtforms.validators import InputRequired, Length, EqualTo, Email
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, logout_user 
+
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -72,7 +74,7 @@ def login():
         user = Users.query.filter_by(email=form.email.data).first() 
 
         if user and check_password_hash(user.password, form.password.data ):
-            session['user_id'] = user.id
+            login_user(user) 
             flash('Login successfull', 'success')
             return redirect(url_for('dashboard.dashboard')) 
         else:
@@ -87,7 +89,7 @@ def login():
 #--------------  Logout  Route  ----------------
 @auth_bp.route('/logout')
 def logout():
-    session.pop('user_id', None) 
+    logout_user()
     flash('You are logged out', 'info')
     return redirect(url_for('auth.login'))
 

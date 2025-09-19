@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
-
+from flask_login import LoginManager
 
 #  Create DB instance
 db=SQLAlchemy()
@@ -20,6 +20,16 @@ def creat_app():
 
     #  initialize db
     db.init_app(app)
+
+    # login manager
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+
+    from app.models.user import Users
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Users.query.get(int(user_id))
 
 
     # register routes_bp
